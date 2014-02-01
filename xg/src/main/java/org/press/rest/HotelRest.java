@@ -45,5 +45,15 @@ public class HotelRest {
 		return sl;
 	}
 	
+	@GET
+	@Path("/one")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ShittyModel returnOneRecord() {
+		List<ShittyModel> sl = sd.getShitty();
+
+		return sl.get(0);
+	}
+
+	
 
 }
