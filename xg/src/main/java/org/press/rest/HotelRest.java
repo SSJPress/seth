@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-import org.press.dao.ShittyDao;
+import org.press.dao.ShittyDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class HotelRest {
 	
 	@Autowired
-	ShittyDao sd;
+	private ShittyDaoImpl sd;
 	
 	@GET
 	@Path("/press")
