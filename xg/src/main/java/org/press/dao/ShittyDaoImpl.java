@@ -15,10 +15,11 @@ public class ShittyDaoImpl implements ShittyDao {
 	DataSource dataSource;
 
 	private String data;
-
-	public String save() {
-		return data;
-	}
+	
+//	@Scheduled(fixedRate=30000)
+//	public void demo() {
+//		System.out.println(data);	
+//	}
 
 	public void insertShitty(ShittyModel sm) {
 
@@ -50,6 +51,11 @@ public class ShittyDaoImpl implements ShittyDao {
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	public String save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
