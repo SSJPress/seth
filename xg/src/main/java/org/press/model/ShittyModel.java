@@ -13,7 +13,7 @@ public class ShittyModel {
 	public ShittyModel(ResultSet rs) throws SQLException {
 		this.rowId = rs.getInt(1);
 		this.name = rs.getString(2);
-		this.name = rs.getString(3);
+		this.addy = rs.getString(3);
 	}
 
 	public String getName() {
