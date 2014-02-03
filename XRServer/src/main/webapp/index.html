@@ -1,0 +1,91 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="css/montana.css" />
+	
+	<title>Lambert Rates</title>
+	<link rel='stylesheet' type='text/css' href='fullcalendar/fullcalendar.css' />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type='text/javascript' src='fullcalendar/fullcalendar.js'></script>
+	<script>
+		function getUrlVars() {
+		    var vars = [], hash;
+		    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		    for(var i = 0; i < hashes.length; i++) {
+		        hash = hashes[i].split('=');
+		        vars.push(hash[0]);
+		        vars[hash[0]] = hash[1];
+		    }
+		    
+		    return vars;
+		}
+	
+		$(document).ready(function() {
+			var lid = getUrlVars()["lid"] != null ? getUrlVars()["lid"] : 1;
+			
+			$.getJSON("http://172.245.128.152:8080/XRServer/rest/hotelLocation/getAll", function(data) {
+				$('#hotelLocations').html();
+				$.each(data, function(i, hotelLocation) {
+					if( lid == hotelLocation.locationId ) {
+						$('#mainLocation').text(hotelLocation.location + ' Rates');
+					}
+
+					var l = new String(hotelLocation.location);
+					var city = l.substring(0, l.indexOf(','));
+					
+					$('#hotelLocations').append('<li><a href="index.html?lid=' 
+							+ hotelLocation.locationId
+							+ '" class="hover2"><strong>'
+							+ city
+							+ '</strong></a></li>');
+					
+				});
+			});
+			
+			$('#calendar').fullCalendar({
+				events: 'http://172.245.128.152:8080/XRServer/rest/hotelRate/getRates?lid=' + lid,
+
+				eventClick: function(calEvent, jsEvent, view) {
+					if( calEvent.title == "Get Rates" ) {
+						calEvent.title = "Retrieving...";
+						calEvent.color = "green";
+						$('#calendar').fullCalendar('updateEvent', calEvent);
+						
+						$.ajax({
+							url : "http://172.245.128.152:8080/XRServer/rest/hotelRate/getTargetedRate?start="+calEvent.start.getTime()
+						}).then(function(data) {
+							$('#calendar').fullCalendar('refetchEvents');
+						});
+					}
+				}
+			});
+		});
+		</script>
+</head>
+<body>
+    <div id="page">
+        <div class="topNaviagationLink">&nbsp;</div>
+    </div>
+
+    <div id="mainPicture">
+    	<div class="picture">
+        	<div id="headerTitle">Montana<br/><br/></div>
+           	<div id="headerSubtext">
+				<div id="li">
+					<div id="hotelLocations"></div>
+				</div>			
+			</div>
+        </div>
+    </div>
+    <div class="contentBox">
+    	<div class="innerBox">
+    		<div class="contentTitle"><div id="mainLocation"></div></div>
+    		<br/>
+			<div id="calendar"></div>
+			<br/>
+        	<div class="contentText"><p>Rates are updated every hour starting 6:00am to 6:00pm MST.</p></div>
+		</div>
+    </div>
+    <div id="footer">Mewmews was here.</div>
+</body>
+</html>
